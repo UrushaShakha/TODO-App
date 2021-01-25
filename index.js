@@ -20,11 +20,20 @@ const isChecked=(event,element)=>{
     }
 }
 
+const deleteItem=(itemId)=>{
+    console.log(itemId);
+    const index= task.findIndex(t=>t.id===itemId);
+    task.splice(index,1);
+    const ele= document.getElementById(itemId);
+    ele.remove();
+    //console.log(task);
+}
+
 window.onload = function () {
     let unOrderedList = "<ul id='list'>";
     task.forEach((item) => {
         // unOrderedList += '<li>'+'<input type="checkbox" value="unchecked">' + item.title + '</li>';
-        unOrderedList += `<li class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} </li> `;
+        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
     }
     )
     unOrderedList += '</ul>';
@@ -45,20 +54,28 @@ const addData = () => {
         console.log(task);
         let ul = document.getElementById("list");
         let li = document.createElement("li");
+        li.setAttribute("id",uuid);
         let checkBox= document.createElement('input');
+        let icon= document.createElement('i');
         checkBox.type="checkbox";
         checkBox.value=0;
         if(newTask.isCompleted)
         {
             checkBox.setAttribute("checked");
-        }
-        checkBox.onclick=function(){isChecked(event,this)};
+        } 
         li.appendChild(checkBox);
-        li.appendChild(document.createTextNode(inputData));
+        li.appendChild(document.createTextNode(` ${inputData} `));
+        icon.setAttribute("class","fa fa-trash");
+        icon.setAttribute("aria-hidden","true");
+        icon.onclick=function(){deleteItem(uuid)};
+        li.appendChild(icon);
+        checkBox.onclick=function(){isChecked(event,this)};
         ul.appendChild(li);
         document.getElementById("input_data").value="";
     }
 }
+
+
 
 
 
