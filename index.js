@@ -33,7 +33,7 @@ window.onload = function () {
     let unOrderedList = "<ul id='list'>";
     task.forEach((item) => {
         // unOrderedList += '<li>'+'<input type="checkbox" value="unchecked">' + item.title + '</li>';
-        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
+        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-edit"> </i> <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
     }
     )
     unOrderedList += '</ul>';
@@ -56,7 +56,8 @@ const addData = () => {
         let li = document.createElement("li");
         li.setAttribute("id",uuid);
         let checkBox= document.createElement('input');
-        let icon= document.createElement('i');
+        let deleteIcon= document.createElement('i');
+        let editIcon=document.createElement('i');
         checkBox.type="checkbox";
         checkBox.value=0;
         if(newTask.isCompleted)
@@ -65,10 +66,13 @@ const addData = () => {
         } 
         li.appendChild(checkBox);
         li.appendChild(document.createTextNode(` ${inputData} `));
-        icon.setAttribute("class","fa fa-trash");
-        icon.setAttribute("aria-hidden","true");
-        icon.onclick=function(){deleteItem(uuid)};
-        li.appendChild(icon);
+        editIcon.setAttribute("class","fa fa-edit");
+        editIcon.setAttribute("aria-hidden","true");
+        deleteIcon.setAttribute("class","fa fa-trash");
+        deleteIcon.setAttribute("aria-hidden","true");
+        deleteIcon.onclick=function(){deleteItem(uuid)};
+        li.appendChild(editIcon);
+        li.appendChild(deleteIcon);
         checkBox.onclick=function(){isChecked(event,this)};
         ul.appendChild(li);
         document.getElementById("input_data").value="";
