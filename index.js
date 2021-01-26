@@ -35,16 +35,26 @@ const changeClassName=(id,value)=>{
 
 const editItem=(itemId)=>{
     //console.log(itemId);
+    document.getElementById(`delete-${itemId}`).classList+=" disable";
     const itemData= task.find(t=>t.id===itemId);
     document.getElementById("input_data").value=itemData.title;
     changeClassName('addButton','hide');
     changeClassName('saveButton','show');
     changeClassName('cancelButton','show');
+    const saveButton=document.getElementById("saveButton");
+    saveButton.onclick=function(){saveData(itemId)};
 
 }
 
-const saveData=()=>{
-    //console.log("save");
+const saveData=(itemId)=>{
+    
+    document.getElementById(`delete-${itemId}`).classList.remove("disable");
+    const index=task.findIndex(t=>t.id===itemId);
+    const inputValue=document.getElementById("input_data").value;
+    task[index].title= inputValue;
+    document.getElementById(itemId).children[1].innerHTML=inputValue;
+    cancelData();
+    console.log(task);
 }
 
 const cancelData=()=>{
@@ -60,7 +70,7 @@ window.onload = function () {
     let unOrderedList = "<ul id='list'>";
     task.forEach((item) => {
         // unOrderedList += '<li>'+'<input type="checkbox" value="unchecked">' + item.title + '</li>';
-        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-edit" onclick="editItem(${item.id})"> </i> <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
+        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > <span> ${item.title} </span> <i class="fa fa-edit" onclick="editItem(${item.id})"> </i> <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
     }
     )
     unOrderedList += '</ul>';
@@ -85,6 +95,7 @@ const addData = () => {
         let checkBox= document.createElement('input');
         let deleteIcon= document.createElement('i');
         let editIcon=document.createElement('i');
+        let spanTag=document.createElement('span');
         checkBox.type="checkbox";
         checkBox.value=0;
         if(newTask.isCompleted)
@@ -92,11 +103,14 @@ const addData = () => {
             checkBox.setAttribute("checked");
         } 
         li.appendChild(checkBox);
-        li.appendChild(document.createTextNode(` ${inputData} `));
+        spanTag.appendChild(document.createTextNode(` ${inputData} `));
+        li.appendChild(spanTag);
         editIcon.setAttribute("class","fa fa-edit");
         editIcon.setAttribute("aria-hidden","true");
+        editIcon.onclick=function(){editItem(uuid)};
         deleteIcon.setAttribute("class","fa fa-trash");
         deleteIcon.setAttribute("aria-hidden","true");
+        deleteIcon.setAttribute("id",`delete-${uuid}`);
         deleteIcon.onclick=function(){deleteItem(uuid)};
         li.appendChild(editIcon);
         li.appendChild(deleteIcon);
