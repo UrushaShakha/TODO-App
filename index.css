@@ -17,3 +17,11 @@ ul{
 .unchecked{
     text-decoration: none;
 }
+
+.show{
+    display: inline-block;
+}
+
+.hide{
+    display: none;
+}

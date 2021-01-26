@@ -29,11 +29,38 @@ const deleteItem=(itemId)=>{
     //console.log(task);
 }
 
+const changeClassName=(id,value)=>{
+    document.getElementById(id).classList=value;
+}
+
+const editItem=(itemId)=>{
+    //console.log(itemId);
+    const itemData= task.find(t=>t.id===itemId);
+    document.getElementById("input_data").value=itemData.title;
+    changeClassName('addButton','hide');
+    changeClassName('saveButton','show');
+    changeClassName('cancelButton','show');
+
+}
+
+const saveData=()=>{
+    console.log("save");
+}
+
+const cancelData=()=>{
+    document.getElementById("input_data").value="";
+    changeClassName('addButton','show');
+    changeClassName('saveButton','hide');
+    changeClassName('cancelButton','hide');
+
+}
+
+
 window.onload = function () {
     let unOrderedList = "<ul id='list'>";
     task.forEach((item) => {
         // unOrderedList += '<li>'+'<input type="checkbox" value="unchecked">' + item.title + '</li>';
-        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-edit"> </i> <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
+        unOrderedList += `<li id=${item.id} class=${item.isCompleted===true?"checked":"unchecked"}> <input type="checkbox" ${item.isCompleted===true?"checked":""} onclick="isChecked(event,this)" > ${item.title} <i class="fa fa-edit" onclick="editItem(${item.id})"> </i> <i class="fa fa-trash" aria-hidden="true" onclick="deleteItem(${item.id})"></i> </li> `;
     }
     )
     unOrderedList += '</ul>';
